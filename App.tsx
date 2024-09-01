@@ -1,14 +1,13 @@
 import React from 'react';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import Homepage from './src/screens/homepage/Homepage';
-
+import { NavigationContainer } from '@react-navigation/native';
+// import StackNavigator from './src/navigation/StackNavigator';
+import TabNavigator from './src/navigation/TabNavigator';
 const App = () => {
   return (
-    <SafeAreaProvider style={{ flex: 1 }}>
-      <SafeAreaView style={{ flex: 1 }} edges={['top', 'left', 'right']}>
-        <Homepage />
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <NavigationContainer>
+      {/* <StackNavigator /> */}
+      <TabNavigator />
+    </NavigationContainer>
   );
 };
 
