@@ -26,10 +26,7 @@ const Homepage = () => {
   }, []);
 
   const handleItemPress = (item) => {
-    navigation.navigate('DetailsStack', {
-      screen: 'DetailsPage',
-      params: { item },
-    });
+    navigation.navigate('DetailsPage', { item });
   };
 
   const renderItem = ({ item }) => (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Homepage from '../screens/homepage/Homepage';
-import LoginPage from '../screens/login/LoginPage';
+import HomeStack from './stacks/HomeStack';
+import AuthStack from './stacks/AuthStack';
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
@@ -14,24 +14,15 @@ const TabNavigator = () => {
             }}
         >
             <Tab.Screen
-                name="Homepage"
-                component={Homepage}
-                options={{
-                    tabBarLabel: 'Home',
-                    headerShown: false
-                }}
+                name="HomeStack"
+                component={HomeStack}
+                options={{ tabBarLabel: 'Home', headerShown: false }}
             />
             <Tab.Screen
-                name="LoginPage"
-                component={LoginPage}
-                options={{
-                    tabBarLabel: 'Login',
-                    headerShown: false
-                }}
+                name="AuthStack"
+                component={AuthStack}
+                options={{ tabBarLabel: 'Login', headerShown: false }}
             />
-
-
-
 
         </Tab.Navigator>
     );

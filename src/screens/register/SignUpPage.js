@@ -1,14 +1,20 @@
 import React from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 
-const LoginPage = ({ navigation }) => {
+const SignUpPage = ({ navigation }) => {
     return (
         <View className="flex-1 justify-center bg-gray-100 px-4">
-            <Text className="text-2xl font-bold mb-5 text-black">Login</Text>
+            <Text className="text-2xl font-bold mb-5 text-black">Sign Up</Text>
 
             <TextInput
                 className="h-10 border border-gray-300 mb-3 px-2"
                 placeholder="Username"
+                placeholderTextColor="#888"
+            />
+
+            <TextInput
+                className="h-10 border border-gray-300 mb-3 px-2"
+                placeholder="Email"
                 placeholderTextColor="#888"
             />
 
@@ -20,13 +26,13 @@ const LoginPage = ({ navigation }) => {
             />
 
             <View className="mb-3">
-                <Button title="Login" onPress={() => { }} />
+                <Button title="Sign Up" onPress={() => { }} />
             </View>
 
             <View className="mb-3">
                 <Button
-                    title="Go to Sign Up"
-                    onPress={() => navigation.navigate('SignUp')}
+                    title="Go to Login"
+                    onPress={() => navigation.navigate('Login')}
                     color="#007bff"
                 />
             </View>
@@ -34,4 +40,4 @@ const LoginPage = ({ navigation }) => {
     );
 };
 
-export default LoginPage;
+export default SignUpPage;
