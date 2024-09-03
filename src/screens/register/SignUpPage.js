@@ -1,40 +1,101 @@
-import React from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import Input from '../login/Input';
+import PasswordInput from '../login/PasswordInput';
 
 const SignUpPage = ({ navigation }) => {
+    const [formData, setFormData] = useState({ username: '', email: '', password: '' });
+    const [errors, setErrors] = useState({ username: '', email: '', password: '' });
+
+    const handleInputChange = (inputName, inputValue) => {
+        setFormData({
+            ...formData,
+            [inputName]: inputValue,
+        });
+    };
+
+    const handleSignUp = () => {
+        let valid = true;
+        let tempErrors = { username: '', email: '', password: '' };
+
+        if (!formData.username) {
+            tempErrors.username = 'Username is required';
+            valid = false;
+        }
+
+        if (!formData.email) {
+            tempErrors.email = 'Email is required';
+            valid = false;
+        }
+
+        if (!formData.password) {
+            tempErrors.password = 'Password is required';
+            valid = false;
+        }
+
+        if (valid) {
+            console.log('Signing up with:', formData);
+        } else {
+            setErrors(tempErrors);
+        }
+    };
+
     return (
         <View className="flex-1 justify-center bg-gray-100 px-4">
             <Text className="text-2xl font-bold mb-5 text-black">Sign Up</Text>
 
-            <TextInput
-                className="h-10 border border-gray-300 mb-3 px-2"
-                placeholder="Username"
-                placeholderTextColor="#888"
+            <Input
+                inputName="username"
+                inputValue={formData.username}
+                handleInputChange={handleInputChange}
+                placeholder="Enter username"
+                error={errors.username}
             />
 
-            <TextInput
-                className="h-10 border border-gray-300 mb-3 px-2"
-                placeholder="Email"
-                placeholderTextColor="#888"
+            <Input
+                inputName="email"
+                inputValue={formData.email}
+                handleInputChange={handleInputChange}
+                placeholder="Enter email"
+                error={errors.email}
             />
 
-            <TextInput
-                className="h-10 border border-gray-300 mb-3 px-2"
-                placeholder="Password"
-                secureTextEntry
-                placeholderTextColor="#888"
+            <PasswordInput
+                inputName="password"
+                inputValue={formData.password}
+                handleInputChange={handleInputChange}
+                placeholder="Enter password"
+                error={errors.password}
             />
 
             <View className="mb-3">
-                <Button title="Sign Up" onPress={() => { }} />
+                <TouchableOpacity
+                    style={{
+                        backgroundColor: '#007bff',
+                        paddingVertical: 10,
+                        paddingHorizontal: 20,
+                        borderRadius: 10,
+                        alignItems: 'center',
+                    }}
+                    onPress={handleSignUp}
+                >
+                    <Text style={{ color: 'white', fontSize: 16 }}>Sign Up</Text>
+                </TouchableOpacity>
             </View>
 
             <View className="mb-3">
-                <Button
-                    title="Go to Login"
+                <TouchableOpacity
+                    style={{
+                        backgroundColor: '#007bff',
+                        paddingVertical: 10,
+                        paddingHorizontal: 20,
+                        borderRadius: 10,
+                        alignItems: 'center',
+                    }}
                     onPress={() => navigation.navigate('Login')}
-                    color="#007bff"
-                />
+                >
+                    <Text style={{ color: 'white', fontSize: 16 }}>Already Have Account?  Log in Here</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
