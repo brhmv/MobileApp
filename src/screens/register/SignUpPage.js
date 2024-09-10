@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import Input from '../login/Input';
 import PasswordInput from '../login/PasswordInput';
+import { storage } from '../../utility/MMKV';
 
 const SignUpPage = ({ navigation }) => {
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });
@@ -14,7 +15,7 @@ const SignUpPage = ({ navigation }) => {
         });
     };
 
-    const handleSignUp = () => {
+    const handleSignUp = async () => {
         let valid = true;
         let tempErrors = { username: '', email: '', password: '' };
 
@@ -34,7 +35,33 @@ const SignUpPage = ({ navigation }) => {
         }
 
         if (valid) {
-            console.log('Signing up with:', formData);
+            console.log("a0");
+            try {
+                const response = await fetch('http://192.168.0.117:5000/api/users/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                const data = await response.json();
+                console.log(response);
+
+
+                if (response.ok) {
+                    storage.set('token', data.token);
+
+                    console.log("a2");
+
+                    Alert.alert('Sign Up Successful!', `Welcome, ${formData.username}`);
+                    navigation.navigate('Login');
+                } else {
+                    Alert.alert('Error', data.message || 'Something went wrong, please try again.');
+                }
+            } catch (error) {
+                console.log('Error', `Unable to register. Please check your network and try again. Error: ${error.message}`);
+            }
         } else {
             setErrors(tempErrors);
         }
@@ -94,7 +121,7 @@ const SignUpPage = ({ navigation }) => {
                     }}
                     onPress={() => navigation.navigate('Login')}
                 >
-                    <Text style={{ color: 'white', fontSize: 16 }}>Already Have Account?  Log in Here</Text>
+                    <Text style={{ color: 'white', fontSize: 16 }}>Already Have Account? Log in Here</Text>
                 </TouchableOpacity>
             </View>
         </View>

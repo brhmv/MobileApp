@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import Input from './Input';
 import PasswordInput from './PasswordInput';
+import { storage } from '../../utility/MMKV';
 
 const LoginPage = ({ navigation }) => {
-    const [formData, setFormData] = useState({ email: '', password: '' });
+    const [formData, setFormData] = useState({
+        email: storage.getString('email') || '',
+        password: '',
+    });
+
     const [errors, setErrors] = useState({ email: '', password: '' });
 
     const handleInputChange = (inputName, inputValue) => {
@@ -14,7 +19,7 @@ const LoginPage = ({ navigation }) => {
         });
     };
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         let valid = true;
         let tempErrors = { email: '', password: '' };
 
@@ -29,7 +34,32 @@ const LoginPage = ({ navigation }) => {
         }
 
         if (valid) {
-            console.log('Logging in with:', formData);
+            try {
+                const response = await fetch('http://192.168.0.117:5000/api/users/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+
+                    storage.set('token', data.token);
+                    storage.set('email', formData.email);
+
+                    Alert.alert('Login Successful!', `Logged in as: ${formData.email}`);
+
+                    navigation.navigate('HomeStack', { screen: 'Homepage' });
+
+                } else {
+                    Alert.alert('Error', data.message || 'Invalid email or password.');
+                }
+            } catch (error) {
+                Alert.alert('Error', 'Unable to login. Please check your network connection and try again.');
+            }
         } else {
             setErrors(tempErrors);
         }
@@ -81,7 +111,7 @@ const LoginPage = ({ navigation }) => {
                     }}
                     onPress={() => navigation.navigate('SignUp')}
                 >
-                    <Text style={{ color: 'white', fontSize: 16 }}>Don't Have Account?  Register Here</Text>
+                    <Text style={{ color: 'white', fontSize: 16 }}>Don't Have Account? Register Here</Text>
                 </TouchableOpacity>
             </View>
         </View>
