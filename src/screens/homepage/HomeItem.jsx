@@ -1,11 +1,17 @@
 import React from 'react';
-import { StyledText, StyledView } from '@common/StyledComponents';
+import { TouchableOpacity, Image, Text } from 'react-native';
 
-const HomeItem = ({ item }) => {
+const HomeItem = ({ item, onPress }) => {
     return (
-        <StyledView className="p-4 m-2 bg-orange-400 rounded-lg">
-            <StyledText className="text-lg font-bold">{item.title}</StyledText>
-        </StyledView>
+        <TouchableOpacity onPress={() => onPress(item)} className="flex-1 m-2 items-center bg-orange-400 rounded-lg p-3 shadow-lg">
+
+            <Image source={{ uri: `${item.image}` }} className="w-40 h-24 rounded-md" />
+
+            <Text className="mt-2 text-lg font-bold text-center">{item.name}</Text>
+
+            <Text className="text-black font-semibold text-center">${item.price}</Text>
+
+        </TouchableOpacity>
     );
 };
 

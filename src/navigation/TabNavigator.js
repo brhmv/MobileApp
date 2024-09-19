@@ -2,14 +2,14 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeStack from './stacks/HomeStack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import BasketStack from './stacks/BasketStack';
+import MyProfile from '../screens/myprofile/MyProfile';
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-
     return (
         <Tab.Navigator
-
             screenOptions={{
                 tabBarActiveTintColor: '#e91e63',
                 tabBarInactiveTintColor: '#595959',
@@ -21,13 +21,36 @@ const TabNavigator = () => {
                 component={HomeStack}
                 options={{
                     tabBarLabel: 'Home',
-                    headerShown: false,
+                    headerShown: false, // Hide header for tab, not the entire stack
                     tabBarIcon: ({ color, size }) => (
                         <Icon name="home" size={size} color={color} />
                     ),
                 }}
             />
 
+            <Tab.Screen
+                name="BasketStack"
+                component={BasketStack}
+                options={{
+                    tabBarLabel: 'Basket',
+                    headerShown: false, // Hide header for tab, manage in stack
+                    tabBarIcon: ({ color, size }) => (
+                        <Icon name="shopping-cart" size={size} color={color} />
+                    ),
+                }}
+            />
+
+            <Tab.Screen
+                name="MyProfile"
+                component={MyProfile}
+                options={{
+                    tabBarLabel: 'Profile',
+                    headerShown: false, // Hide header for tab
+                    tabBarIcon: ({ color, size }) => (
+                        <Icon name="person" size={size} color={color} />
+                    ),
+                }}
+            />
         </Tab.Navigator>
     );
 };

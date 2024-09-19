@@ -19,6 +19,9 @@ const LoginPage = ({ navigation }) => {
         });
     };
 
+    // console.log(navigation.getState());
+
+
     const handleLogin = async () => {
         let valid = true;
         let tempErrors = { email: '', password: '' };
@@ -35,7 +38,7 @@ const LoginPage = ({ navigation }) => {
 
         if (valid) {
             try {
-                const response = await fetch('http://192.168.0.117:5000/api/users/login', {
+                const response = await fetch('http://192.168.0.117:3000/auth/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -43,27 +46,33 @@ const LoginPage = ({ navigation }) => {
                     body: JSON.stringify(formData),
                 });
 
-                const data = await response.json();
+                // const responseText = await response.text();
+                // console.log('Response text:', responseText);
+
+                const data = response.json();
+
 
                 if (response.ok) {
-
-                    storage.set('token', data.token);
-                    storage.set('email', formData.email);
+                    storage.set('token', data.accessToken);
+                    // console.log(data.accessToken);
+                    storage.set('refreshToken', data.refreshToken);
+                    // storage.set('email', formData.email);
 
                     Alert.alert('Login Successful!', `Logged in as: ${formData.email}`);
-
-                    navigation.navigate('HomeStack', { screen: 'Homepage' });
+                    // navigation.navigate('HomeStack', { screen: 'Homepage' });
+                    // navigation.navigate('HomeStack');
 
                 } else {
                     Alert.alert('Error', data.message || 'Invalid email or password.');
                 }
             } catch (error) {
-                Alert.alert('Error', 'Unable to login. Please check your network connection and try again.');
+                Alert.alert('Error', `Unable to login. Please check your network connection and try again. Error: ${error.message}`);
             }
         } else {
             setErrors(tempErrors);
         }
     };
+
 
     return (
         <View className="flex-1 justify-center bg-gray-100 px-4">

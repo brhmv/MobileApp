@@ -12,8 +12,7 @@ const CustomHeader = ({ title }) => {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 16, backgroundColor: '#f8f8f8' }}>
 
 
-            {navigation.canGoBack() && <Button title="Back" onPress={() => navigation.goBack()} />
-            }
+            {navigation.canGoBack() && <Button title="Back" onPress={() => navigation.goBack()} />}
 
             <Text style={{ fontSize: 20 }}>{title}</Text>
 

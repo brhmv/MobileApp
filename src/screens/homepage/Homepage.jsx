@@ -1,123 +1,118 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, ActivityIndicator, TouchableOpacity, Text, TextInput, Button, View, KeyboardAvoidingView } from 'react-native';
+import { FlatList, ActivityIndicator, TextInput, View, Text } from 'react-native';
 import HomeItem from './HomeItem';
 import { useNavigation } from '@react-navigation/native';
 import { StyledView } from '@common/StyledComponents';
 import { useMMKVString } from 'react-native-mmkv';
 
-
 const Homepage = () => {
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [newTodo, setNewTodo] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [token] = useMMKVString('token');
   const navigation = useNavigation();
 
-  useEffect(() => {
+  const categories = [
+    { id: '1', name: 'Foods', icon: '🍔' },
+    { id: '2', name: 'Gift', icon: '🎁' },
+    { id: '3', name: 'Fashion', icon: '👗' },
+    { id: '4', name: 'Gadget', icon: '📱' },
+    { id: '5', name: 'Accessory', icon: '💍' },
+  ];
 
-    console.log(token);
-
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://192.168.0.117:5000/api/todos/', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Network response was not ok: ${errorText}`);
-        }
-
-        const result = await response.json();
-        setData(result);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [token]);
-
-  const handleAddTodo = async () => {
-    if (!newTodo) {
-      alert('Please enter a todo title.');
-      return;
-    }
-
+  const fetchData = async () => {
     try {
-      const response = await fetch('http://192.168.0.117:5000/api/todos/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ title: newTodo }),
+      const response = await fetch('http://192.168.0.117:3000/products', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
       });
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Error adding todo: ${errorText}`);
+        throw new Error(`Network response was not ok: ${errorText}`);
       }
 
-      const newTodoItem = await response.json();
-      setData((prevData) => [...prevData, newTodoItem]);
-      setNewTodo('');
+      const result = await response.json();
+      setData(result.products);
+      setFilteredData(result.products)
+      setLoading(false);
     } catch (error) {
-      console.error('Error adding todo:', error);
+      console.error('Error fetching data:', error);
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [token]);
 
   const handleItemPress = (item) => {
     navigation.navigate('DetailsPage', { item });
   };
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => handleItemPress(item)}>
-      <HomeItem item={item} />
-    </TouchableOpacity>
-  );
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    if (query) {
+      const filtered = data.filter((item) =>
+        item.name.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredData(filtered);
+    } else {
+      setFilteredData(data);
+    }
+  };
 
   return (
     <StyledView className="flex-1 justify-center">
-      <Text style={{ color: 'black', fontSize: 18, padding: 10 }}>Hello</Text>
+
+      <View className="flex-row justify-between items-center p-5 bg-white">
+        <Text className="text-2xl font-bold text-black">Trendyol</Text>
+
+        <TextInput
+          className="bg-gray-200 px-3 py-2 rounded-lg w-3/5 text-black"
+          placeholder="Search"
+          placeholderTextColor="black"
+          value={searchQuery}
+          onChangeText={handleSearch}
+        />
+      </View>
+
+      <View className="pb-2 bg-white rounded-lg shadow-md mb-2">
+        <Text className="text-lg font-bold mb-2 text-black text-center">Categories</Text>
+
+        <FlatList
+          horizontal
+          data={categories}
+          renderItem={({ item }) => (
+            <View className="flex items-center mr-5">
+              <Text className="text-2xl">{item.icon}</Text>
+              <Text className="text-black">{item.name}</Text>
+            </View>
+          )}
+          keyExtractor={(item) => item.id}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingHorizontal: 40
+          }}
+        />
+      </View>
 
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
         <FlatList
-          data={data}
-          keyExtractor={(item) => item.id ? item.id.toString() : Math.random().toString()}
-          renderItem={renderItem}
-          contentContainerStyle={{ paddingHorizontal: 16 }}
+          data={filteredData}
+          keyExtractor={(item) => item._id.toString()}
+          renderItem={({ item }) => (
+            <HomeItem item={item} onPress={handleItemPress} />
+          )}
+          contentContainerStyle={{ paddingHorizontal: 5 }}
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
+          key={'2-columns'}
         />
       )}
-
-      <KeyboardAvoidingView behavior="padding" style={{ width: '100%', position: 'absolute', bottom: 0 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16 }}>
-          <TextInput
-            value={newTodo}
-            onChangeText={setNewTodo}
-            placeholder="Enter new todo"
-            style={{
-              flex: 1,
-              borderColor: '#ccc',
-              borderWidth: 1,
-              borderRadius: 4,
-              paddingHorizontal: 8,
-              marginRight: 8,
-              color: 'black',
-            }}
-          />
-          <Button title="Add Todo" onPress={handleAddTodo} />
-        </View>
-      </KeyboardAvoidingView>
     </StyledView>
   );
 };

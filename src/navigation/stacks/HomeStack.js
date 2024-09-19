@@ -2,7 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Homepage from '../../screens/homepage/Homepage';
 import DetailsPage from '../../screens/detailpage/DetailsPage';
-import CustomHeader from '../../common/components/CustomHeader';
+// import CustomHeader from '../../common/components/CustomHeader';
 
 const Stack = createNativeStackNavigator();
 
@@ -12,8 +12,8 @@ const HomeStack = () => {
             <Stack.Screen
                 name="Homepage"
                 component={Homepage}
-                options={{ header: () => <CustomHeader title="Home" /> }}
-
+                options={{ headerShown: false }}
+            // options={{ header: () => <CustomHeader title="Home" /> }}
             />
 
             <Stack.Screen

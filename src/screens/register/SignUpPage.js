@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import Input from '../login/Input';
 import PasswordInput from '../login/PasswordInput';
-import { storage } from '../../utility/MMKV';
 
 const SignUpPage = ({ navigation }) => {
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });
@@ -37,7 +36,7 @@ const SignUpPage = ({ navigation }) => {
         if (valid) {
             console.log("a0");
             try {
-                const response = await fetch('http://192.168.0.117:5000/api/users/register', {
+                const response = await fetch('http://192.168.0.117:3000/auth/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -45,19 +44,14 @@ const SignUpPage = ({ navigation }) => {
                     body: JSON.stringify(formData),
                 });
 
-                const data = await response.json();
-                console.log(response);
-
+                const text = await response.text();
+                console.log('Response text:', text);
 
                 if (response.ok) {
-                    storage.set('token', data.token);
-
-                    console.log("a2");
-
                     Alert.alert('Sign Up Successful!', `Welcome, ${formData.username}`);
                     navigation.navigate('Login');
                 } else {
-                    Alert.alert('Error', data.message || 'Something went wrong, please try again.');
+                    Alert.alert('Error', text || 'Something went wrong, please try again.');
                 }
             } catch (error) {
                 console.log('Error', `Unable to register. Please check your network and try again. Error: ${error.message}`);
@@ -66,6 +60,7 @@ const SignUpPage = ({ navigation }) => {
             setErrors(tempErrors);
         }
     };
+
 
     return (
         <View className="flex-1 justify-center bg-gray-100 px-4">
