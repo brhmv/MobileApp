@@ -19,9 +19,6 @@ const LoginPage = ({ navigation }) => {
         });
     };
 
-    // console.log(navigation.getState());
-
-
     const handleLogin = async () => {
         let valid = true;
         let tempErrors = { email: '', password: '' };
@@ -46,21 +43,12 @@ const LoginPage = ({ navigation }) => {
                     body: JSON.stringify(formData),
                 });
 
-                // const responseText = await response.text();
-                // console.log('Response text:', responseText);
-
                 const data = response.json();
-
 
                 if (response.ok) {
                     storage.set('token', data.accessToken);
-                    // console.log(data.accessToken);
                     storage.set('refreshToken', data.refreshToken);
-                    // storage.set('email', formData.email);
-
                     Alert.alert('Login Successful!', `Logged in as: ${formData.email}`);
-                    // navigation.navigate('HomeStack', { screen: 'Homepage' });
-                    // navigation.navigate('HomeStack');
 
                 } else {
                     Alert.alert('Error', data.message || 'Invalid email or password.');

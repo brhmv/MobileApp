@@ -1,4 +1,4 @@
-import {styled} from 'nativewind';
+import { styled } from 'nativewind';
 import {
   View,
   Text,

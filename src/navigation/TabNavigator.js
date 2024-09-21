@@ -21,7 +21,7 @@ const TabNavigator = () => {
                 component={HomeStack}
                 options={{
                     tabBarLabel: 'Home',
-                    headerShown: false, // Hide header for tab, not the entire stack
+                    headerShown: false,
                     tabBarIcon: ({ color, size }) => (
                         <Icon name="home" size={size} color={color} />
                     ),
@@ -33,7 +33,7 @@ const TabNavigator = () => {
                 component={BasketStack}
                 options={{
                     tabBarLabel: 'Basket',
-                    headerShown: false, // Hide header for tab, manage in stack
+                    headerShown: false,
                     tabBarIcon: ({ color, size }) => (
                         <Icon name="shopping-cart" size={size} color={color} />
                     ),
@@ -45,7 +45,7 @@ const TabNavigator = () => {
                 component={MyProfile}
                 options={{
                     tabBarLabel: 'Profile',
-                    headerShown: false, // Hide header for tab
+                    headerShown: false,
                     tabBarIcon: ({ color, size }) => (
                         <Icon name="person" size={size} color={color} />
                     ),

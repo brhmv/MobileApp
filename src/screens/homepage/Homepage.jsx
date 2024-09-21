@@ -66,11 +66,11 @@ const Homepage = () => {
   return (
     <StyledView className="flex-1 justify-center">
 
-      <View className="flex-row justify-between items-center p-5 bg-white">
+      <View className="flex-row justify-between items-center p-5 bg-orange-400">
         <Text className="text-2xl font-bold text-black">Trendyol</Text>
 
         <TextInput
-          className="bg-gray-200 px-3 py-2 rounded-lg w-3/5 text-black"
+          className="bg-gray-100 px-3 py-2 rounded-lg w-3/5 text-black"
           placeholder="Search"
           placeholderTextColor="black"
           value={searchQuery}
@@ -78,7 +78,7 @@ const Homepage = () => {
         />
       </View>
 
-      <View className="pb-2 bg-white rounded-lg shadow-md mb-2">
+      <View className="pb-3 bg-white rounded-lg shadow-md mb-2 pt-2">
         <Text className="text-lg font-bold mb-2 text-black text-center">Categories</Text>
 
         <FlatList
@@ -86,7 +86,7 @@ const Homepage = () => {
           data={categories}
           renderItem={({ item }) => (
             <View className="flex items-center mr-5">
-              <Text className="text-2xl">{item.icon}</Text>
+              <Text className="text-2xl text-black">{item.icon}</Text>
               <Text className="text-black">{item.name}</Text>
             </View>
           )}

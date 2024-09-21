@@ -13,7 +13,6 @@ const HomeStack = () => {
                 name="Homepage"
                 component={Homepage}
                 options={{ headerShown: false }}
-            // options={{ header: () => <CustomHeader title="Home" /> }}
             />
 
             <Stack.Screen
